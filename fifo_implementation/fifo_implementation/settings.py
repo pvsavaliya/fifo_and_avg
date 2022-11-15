@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'src.fifo_manage',
-    # 'src.fifo_user',
     'rest_framework'
 ]
 
