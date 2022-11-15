@@ -8,20 +8,26 @@ class BuySerializer(serializers.HyperlinkedModelSerializer):
             "id",
             "company_name",
             "trade_type",
-            "quantity",
             "commulative_allocation",
             "quantity",
-            # "balance_qty",
-            "quantity",
+            "balance_qty",
             "avg_purchase_price",
             "buy_price",
-            # "sell_price",
-            "buy_at",
-            # "sell_at",
+            "sell_price",
+            "created_at",
+            "remaining_quantity",
+            "trade_price"
         ]
-
-    # def create(self, validated_data):
-        
-    #     user_obj = self.Meta.model(**validated_data)
-    #     user_obj.save()
-    #     return user_obj
+class SellSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = BuyAndSell
+        fields = [
+            "id",
+            "company_name" ,
+            "trade_type",
+            "quantity",
+            "sell_price" ,
+            "trade_price",
+            "balance_qty",
+            "commulative_allocation",
+        ]
