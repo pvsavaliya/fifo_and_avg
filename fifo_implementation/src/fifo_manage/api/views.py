@@ -103,19 +103,29 @@ class SellStocksView(generics.UpdateAPIView):
                             }
                 return Response(response, content_type="application/json")
                 
+            t_avg = (sell_data[last_len].avg_purchase_price * sell_data[last_len].balance_qty)
+            t_qty = sell_data[last_len].balance_qty
+
             for sell in sell_data:
                 if sell_count > sell.remaining_quantity:
+                    t_avg -= (sell.remaining_quantity * sell.buy_price)
+                    t_qty -= sell.remaining_quantity
                     sell_count -= sell.remaining_quantity
                     sell.remaining_quantity = 0
                     sell.is_sold = True
                     sell.save()
                 else:
+                    t_avg -= (sell_count * sell.buy_price)
+                    t_qty -= sell_count
                     sell.remaining_quantity -= sell_count
-                    sell.save()
+                    sell.save() 
                     break
+
             data.update({ 
                 "balance_qty": sell_data[last_len].balance_qty - data["quantity"] ,
-                "commulative_allocation": sell_data[last_len].commulative_allocation})    
+                "commulative_allocation": sell_data[last_len].commulative_allocation,
+                "avg_purchase_price" : (t_avg/t_qty)
+                })   
             serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
